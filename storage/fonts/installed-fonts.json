@@ -1,0 +1,13 @@
+{
+    "fontawesome": {
+        "normal": "fontawesome_normal_199b3bdf8922e7ae97709d2fd4a78cd7"
+    },
+    "vazir": {
+        "normal": "\/opt\/lampp\/htdocs\/seirani-tarebar\/storage\/fonts\/vazir_normal_4f324b1ced6187ff5279da410cf84465",
+        "bold": "\/opt\/lampp\/htdocs\/seirani-tarebar\/storage\/fonts\/vazir_bold_8d5d7ac7f83088786af296ce13704e3b",
+        "300": "\/opt\/lampp\/htdocs\/seirani-tarebar\/storage\/fonts\/vazir_300_69b495513ac257c5e1f57112d0b298f9",
+        "500": "\/opt\/lampp\/htdocs\/seirani-tarebar\/storage\/fonts\/vazir_500_028e44ce0844fdb2a23e30ea322825f6",
+        "100": "\/opt\/lampp\/htdocs\/seirani-tarebar\/storage\/fonts\/vazir_100_362e50bf87f304bcee7082dd87c25335",
+        "900": "vazir_900_655f200649272f1d486149cfde20f3bd"
+    }
+}
