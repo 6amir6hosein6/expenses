@@ -1,68 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    @include('dashboard.header')
     <link rel="stylesheet" href="{{asset("dist/css/adminlte.min.css")}}">
 
     <title>چاپ فاکتور</title>
     <style>
-        @font-face {
-            font-family: Vazir;
-            src: url('{{asset("dist/fonts/Vazir.eot")}}');
-            src: url('{{asset("dist/fonts/Vazir.eot?#iefix")}}') format('embedded-opentype'),
-            url('{{asset("dist/fonts/Vazir.woff2")}}') format('woff2'),
-            url('{{asset("dist/fonts/Vazir.woff")}}') format('woff'),
-            url('{{asset("dist/fonts/Vazir.ttf")}}') format('truetype');
-            font-weight: normal;
-        }
-
-        @font-face {
-            font-family: Vazir;
-            src: url('{{asset("dist/fonts/Vazir-Bold.eot")}}');
-            src: url('{{asset("dist/fonts/Vazir-Bold.eot?#iefix")}}') format('embedded-opentype'),
-            url('{{asset("dist/fonts/Vazir-Bold.woff2")}}') format('woff2'),
-            url('{{asset("dist/fonts/Vazir-Bold.woff")}}') format('woff'),
-            url('{{asset("dist/fonts/Vazir-Bold.ttf")}}') format('truetype');
-            font-weight: bold;
-        }
-
-        body {
-            direction: rtl;
-            text-align: right;
-            font-family: 'Vazir', sans-serif !important;
-        }
-
-
-        ul {
-            padding-inline-start: 0px;
-        }
-
-        .content-wrapper {
-            transition: margin-right .3s ease-in-out;
-            margin-right: 250px;
-            margin-left: 0;
-            z-index: 3000;
-        }
-
-        th {
+        .table th {
             vertical-align: middle !important;
             text-align: center;
         }
 
         th {
-            font-size: 12px;
+            font-size: 15px;
+        }
+
+        p {
+            font-size: 15px
         }
     </style>
 </head>
 <meta charset="utf-8">
 <body class="hold-transition sidebar-mini">
 <center>
-    <div class="wrapper" style="width: 9.5cm;max-width: 9.5cm">
+    <div class="wrapper" style="width: 15cm;max-width: 15cm;position:inherit !important;">
         <center>
             <!-- Content Wrapper. Contains page content -->
-            <div class="content-wrapper" style="margin-right: 0; !important;background: white !important;">
+            <div class="content-wrapper" style="margin-right: 0;margin-left: 0; !important;background: white !important;">
                 <div class="content-header">
                 </div>
                 <section class="content">
@@ -70,23 +34,28 @@
                         <div class="row" style="border: 2px solid lightgray;padding: 5px;border-bottom: 0">
                             <div class="col-sm-6">
                                 <center>
-                                    <p style="font-size: 10px" class="m-0 text-dark">بار فروشی <br> سیفعلی سیرانی و پسران</p>
+                                    <br>
+                                    <p style="font-size: 15px" class="m-0 text-dark">بار فروشی <br> سیفعلی سیرانی و پسران</p>
                                 </center>
                             </div>
-                            <div class="col-sm-5" style="text-align: center;font-size: 8px">
+                            <div class="col-sm-6" style="text-align: center;font-size: 12px">
                                 <center>
                                     <span style="padding-bottom: 0">
                                         تلفن حجره : 2232129 - 0423
                                     </span>
+                                    <br>
                                     <span>
                                         سیفعلی سیرانی : 09141248299
                                     </span>
+                                    <br>
                                     <span>
                                         سعید سیرانی : 09149241945
                                     </span>
+                                    <br>
                                     <span>
                                         فرهاد سیرانی : 09148290018
                                     </span>
+                                    <br>
                                     <span>
                                         فرزین سیرانی : 09148290018
                                     </span>
@@ -95,25 +64,27 @@
                             </div>
                         </div>
                         <div class="row" style="direction: rtl;">
-                            <div class="col-sm-6" style="border: 1px solid lightgray;padding: 10px;">
+                            <div class="col-sm-4" style="border: 1px solid lightgray;padding: 10px;">
                                 <p style="font-size: 12px;text-align: right" class="m-0 text-dark">صورت حساب :
                                     <br>
                                     <b>{{$factor->customer_name}}</b>
                                 </p>
                             </div><!-- /.col -->
 
-                            <div class="col-sm-3" style="border: 1px solid lightgray;padding: 10px">
+                            <div class="col-sm-4" style="border: 1px solid lightgray;padding: 10px">
                                 <p style="font-size: 12px" class="m-0 text-dark">تاریخ : <b>{{$factor->date}}</b></p>
                             </div>
 
-                            <div class="col-sm-3" style="border: 1px solid lightgray;padding: 10px">
+                            <div class="col-sm-4" style="border: 1px solid lightgray;padding: 10px">
                                 <p style="font-size: 12px" class="m-0 text-dark">بدهی قبلی :
                                     <b>{{number_format($factor->last_debt)}}</b></p>
                             </div>
                         </div><!-- /.row -->
                     </div><!-- /.container-fluid -->
 
-                    <div class="container-fluid " style="overflow-x:auto;">
+                    <br>
+
+                    <div class="container-fluid">
                         <table class="table table-sm table-bordered">
                             <thead>
                             <tr>
@@ -150,7 +121,6 @@
                                 <th scope="col"></th>
                                 <th scope="col">{{number_format($factor->worker_paid)}}</th>
                             </tr>
-                            <hr>
                             <tr style="border-top: 2px solid;">
                                 <th scope="col">جمع کل</th>
                                 <th scope="col">{{number_format($total_products_count)}}</th>
@@ -161,7 +131,6 @@
 
                             </tbody>
                         </table>
-                        <br>
                         <div class="row">
                             <div class="col-sm-6" style="border: 1px solid lightgray;padding: 10px">
                                 <p style="font-size: 12px" class="m-0 text-dark">وجه پرداختی :
@@ -197,5 +166,6 @@
     </div>
     <!-- ./wrapper -->
 </center>
+@include('dashboard.footer')
 </body>
 </html>
