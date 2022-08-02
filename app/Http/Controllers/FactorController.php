@@ -187,15 +187,6 @@ class FactorController extends Controller
         $factor = Factor::find($id);
         $factor_products = FactorProduct::where('factor_id',$factor->id);
 
-        $pdfFile = PDF::loadView('dashboard.factors.print_factor', [
-            'factor' => $factor,
-            'factor_products' => $factor_products->get(),
-            'total_products_price' => $factor_products->sum(DB::raw('weight * count * fee')),
-            'total_products_count' => $factor_products->sum(DB::raw('count')),
-            'total_products_weight' => $factor_products->sum(DB::raw('weight')),
-        ]);
-//        return $pdfFile->download('users-list.pdf');
-
         return view('dashboard.factors.print_factor', [
             'factor' => $factor,
             'factor_products' => $factor_products->get(),
