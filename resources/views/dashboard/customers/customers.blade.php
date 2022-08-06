@@ -55,11 +55,13 @@
                                 </div>
                                 <div class="col-sm-1">
                                     @if(isset($keyword))
-                                        <a class="btn btn-success" href="{{route('customers.print',[$category_type,$keyword])}}">
+                                        <a class="btn btn-success"
+                                           href="{{route('customers.print',[$category_type,$keyword])}}">
                                             <i class="fa fa-print "></i>
                                         </a>
                                     @else
-                                        <a class="btn btn-success" href="{{route('customers.print',[$category_type,null])}}">
+                                        <a class="btn btn-success"
+                                           href="{{route('customers.print',[$category_type,null])}}">
                                             <i class="fa fa-print "></i>
                                         </a>
                                     @endif
@@ -77,6 +79,13 @@
                 <div class="alert alert-success">
                     <center>
                         <li class="breadcrumb-item">{{ session('status') }}</li>
+                    </center>
+                </div>
+            @endif
+            @if (session('customer_delete'))
+                <div class="alert alert-danger">
+                    <center>
+                        <li class="breadcrumb-item">{{ session('customer_delete') }}</li>
                     </center>
                 </div>
             @endif
@@ -112,7 +121,7 @@
                             <th scope="col">{{$customer->address}}</th>
                             <th scope="col">
                                 @if($customer->photo)
-                                    <img src="data:image/png;base64, {{$customer->photo}}"
+                                    <img src="{{$customer->photo}}"
                                          style="width: 100px;max-width: 100px">
                                 @else
                                     عکس ندارد

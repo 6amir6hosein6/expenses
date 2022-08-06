@@ -4,14 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CustomerRequest;
 use App\Models\Customer;
-use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Database\Eloquent\Collection;
+use App\Models\Factor;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
-use function Composer\Autoload\includeFile;
-use function PHPUnit\Framework\isNull;
+use Intervention\Image\Facades\Image;
 
 class CustomerController extends Controller
 {
@@ -30,7 +27,21 @@ class CustomerController extends Controller
     {
         $photo = null;
         if (isset($request->photo)) {
-            $photo = base64_encode(file_get_contents($request->file('photo')->path()));
+            $image = $request->file('photo');
+
+            $img = Image::make($image->getRealPath());
+            if ($img->getHeight() > $img->getWidth()){
+                $img->resize($img->getWidth() * (500 / $img->getHeight()), 500, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
+            }else{
+                $img->resize(500, $img->getHeight() * (500 / $img->getWidth()), function ($constraint) {
+                    $constraint->aspectRatio();
+                });
+            }
+
+            $photo = (string)$img->encode('data-url');
+
         }
         $data = [
             'name' => $request->name,
@@ -71,6 +82,13 @@ class CustomerController extends Controller
 
     public function destroy($id): \Illuminate\Http\RedirectResponse
     {
+
+        if (!is_null(Factor::where('customer_id',$id)->first())){
+            return Redirect::route('customers.index')->with('customer_delete', 'امکان حذف مشتری به علت وجود فاکتور وجود ندارد');
+        }
+        if (!is_null(Transaction::where('customer_id',$id)->first())){
+            return Redirect::route('customers.index')->with('customer_delete', 'امکان حذف مشتری به علت وجود تراکنش وجود ندارد');
+        }
         Customer::find($id)->delete();
         return Redirect::route('customers.index')->with('status', 'مشتری با موفقیت حذف شد');
     }

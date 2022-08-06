@@ -45,7 +45,7 @@
                     @enderror
                 </div>
                 <div class="input-group mb-3">
-                    <input type="phone" name="phone" class="form-control" placeholder="شماره موبایل">
+                    <input type="phone" name="username" class="form-control" placeholder="شماره موبایل">
                     <div class="input-group-append">
                         <span class="fa fa-envelope input-group-text"></span>
                     </div>

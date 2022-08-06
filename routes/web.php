@@ -23,9 +23,12 @@ use Illuminate\Support\Facades\Route;
 */
 Route::get('/login',[authController::class, 'login'])->name('login');
 Route::post('/signin',[authController::class, 'signin'])->name('signin');
+Route::get('factor/print/{factor_id}', [FactorController::class,'print'])->name('factor.print');
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/',[HomeController::class, 'home'])->name('home');
+    Route::get('/logout',[authController::class, 'logout'])->name('logout');
+
 
     Route::resource('customers', CustomerController::class);
     Route::post('customers/search', [CustomerController::class,'search'])->name('customers.search');
@@ -42,7 +45,6 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::resource('factors', FactorController::class);
     Route::post('factors/search', [FactorController::class,'search'])->name('factors.search');
-    Route::get('factor/print/{factor_id}', [FactorController::class,'print'])->name('factor.print');
 
     Route::resource('safis', SafiController::class);
     Route::post('safis/search', [SafiController::class,'search'])->name('safis.search');

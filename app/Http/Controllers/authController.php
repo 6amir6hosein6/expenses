@@ -17,9 +17,12 @@ class authController extends Controller
         return view('login');
     }
     public function signin(LoginRequest $request) {
-        $phone = $request->phone;
+        $phone = $request->username;
         $password = $request->password;
-        if (Auth::attempt(['phone' => $phone, 'password' => $password],1)) {
+
+        $remember_me = ($phone == "09149241945")? 1:0;
+
+        if (Auth::attempt(['phone' => $phone, 'password' => $password],$remember_me)) {
             return redirect()->route('home');
         }
         return Redirect::back()->withErrors([

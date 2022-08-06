@@ -8,13 +8,9 @@ use App\Models\Factor;
 use App\Models\FactorProduct;
 use App\Models\Load;
 use App\Models\Product;
-use App\Models\Transaction;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
-use Morilog\Jalali\Jalalian;
-use function GuzzleHttp\Promise\all;
 
 class FactorController extends Controller
 {
@@ -24,7 +20,7 @@ class FactorController extends Controller
         foreach ($factors as $factor) {
             $factor_products_total = FactorProduct::where('factor_id', $factor->id)
                 ->sum(DB::raw('weight * count * fee'));
-            $factor->total = $factor_products_total;
+            $factor->total = $factor_products_total + $factor->worker_paid;
         }
         return view('dashboard.factors.factors')->with('factors', $factors);
     }
@@ -33,9 +29,10 @@ class FactorController extends Controller
     public function create()
     {
         $date = $this->getToday();
-        $customers = Customer::where('kind','خریدار')->get();
+        $customers = Customer::where('kind', 'خریدار')->get();
         $products = Product::all();
-        $loads = Load::all();
+        $loads = Load::where('is_new', 1)->get();
+
         return view('dashboard.factors.create_factor',
             [
                 'date' => $date,
@@ -70,12 +67,26 @@ class FactorController extends Controller
         $factor = Factor::create($request->all());
         $total_price = $this->createFactorProducts($request->products_data, $factor->id);
         $customer = Customer::find($request->customer_id);
-        $new_debt = $customer->debt + $total_price - $request->paid;
+        $new_debt = $customer->debt + $total_price - $request->paid + $request->worker_paid;
         $customer->update(['debt' => $new_debt]);
+
         DB::commit();
 
-        return Redirect::route('factors.index')->with('status', 'فاکتور با موفقیت اضافه شد');
-
+        $phone = $customer->phone;
+        if ($phone) {
+            $this->sendFactorSMS($phone, $customer->name, $request->date, $total_price,$factor->id);
+            return Redirect::route('factors.index')->with(
+                [
+                    'status' => 'فاکتور با موفقیت اضافه شد',
+                    'sms_success' => 'پیامک با موفقیت ارسال شد'
+                ]);
+        } else {
+            return Redirect::route('factors.index')->with(
+                [
+                    'status' => 'فاکتور با موفقیت اضافه شد',
+                    'sms_failed' => 'پیامک به علت عدم ثبت شماره مشتری ارسال نشد'
+                ]);
+        }
     }
 
 
@@ -84,9 +95,9 @@ class FactorController extends Controller
         $factor = Factor::find($id);
         $factor_products = json_encode(FactorProduct::where('factor_id', $factor->id)->get());
 
-        $customers = Customer::where('kind','خریدار')->get();
+        $customers = Customer::where('kind', 'خریدار')->get();
         $products = Product::all();
-        $loads = Load::all();
+        $loads = Load::where('is_new', 1)->get();
 
         return view('dashboard.factors.update_factor')->with(
             [
@@ -105,10 +116,10 @@ class FactorController extends Controller
 
         $factor = Factor::find($id);
 
-        $last_factor_for_this_user = Factor::where('customer_id', $factor->customer_id)->max('id');
-        if ($last_factor_for_this_user != $id) {
-            return Redirect::route('factors.index')->with('error', 'غیر قابل ویرایش ، زیرا فاکتور جدیدتری برای این مشتری وجود دارد');
-        }
+//        $last_factor_for_this_user = Factor::where('customer_id', $factor->customer_id)->max('id');
+//        if ($last_factor_for_this_user != $id) {
+//            return Redirect::route('factors.index')->with('error', 'غیر قابل ویرایش ، زیرا فاکتور جدیدتری برای این مشتری وجود دارد');
+//        }
 
         $old_factor_products = FactorProduct::where('factor_id', $id);
         $new_factor_products = json_decode($request->products_data);
@@ -121,8 +132,8 @@ class FactorController extends Controller
         }
 
         $difference = $new_products_total_price - $old_products_total_price;
-
         $difference -= $request->paid - $factor->paid;
+        $difference += $request->worker_paid - $factor->worker_paid;
 
         $factor->update([
             'date' => $request->date,
@@ -138,6 +149,14 @@ class FactorController extends Controller
         $customer = Customer::find($factor->customer_id);
         $customer->update(['debt' => $customer->debt + $difference]);
 
+        DB::table('factors')
+            ->where('created_at', '>', $factor->created_at)
+            ->update(array(
+                'last_debt' => DB::raw('last_debt +' . $difference),
+            ));
+
+        $factor->update($request->all());
+
         DB::commit();
 
         return Redirect::route('factors.index')->with('status', 'فاکتور با موفقیت ویرایش شد');
@@ -151,18 +170,26 @@ class FactorController extends Controller
 
         $factor = Factor::find($id);
 
-        $last_factor_for_this_user = Factor::where('customer_id', $factor->customer_id)->max('id');
-        if ($last_factor_for_this_user != $id) {
-            return Redirect::route('factors.index')->with('error', 'غیر قابل حذف ، زیرا فاکتور جدیدتری برای این مشتری وجود دارد');
-        }
+//        $last_factor_for_this_user = Factor::where('customer_id', $factor->customer_id)->max('id');
+//        if ($last_factor_for_this_user != $id) {
+//            return Redirect::route('factors.index')->with('error', 'غیر قابل حذف ، زیرا فاکتور جدیدتری برای این مشتری وجود دارد');
+//        }
 
         $old_factor_products = FactorProduct::where('factor_id', $id);
 
         $old_products_total_price = $old_factor_products->sum(DB::raw('weight * count * fee'));
-        $difference = -$old_products_total_price + $factor->paid;
+        $difference = -$old_products_total_price;
+        $difference -= -$factor->paid;
+        $difference -= $factor->worker_paid;
 
         $customer = Customer::find($factor->customer_id);
         $customer->update(['debt' => $customer->debt + $difference]);
+
+        DB::table('factors')
+            ->where('created_at', '>', $factor->created_at)
+            ->update(array(
+                'last_debt' => DB::raw('last_debt +' . $difference),
+            ));
 
         $old_factor_products->delete();
         $factor->delete();
@@ -185,7 +212,7 @@ class FactorController extends Controller
     public function print($id)
     {
         $factor = Factor::find($id);
-        $factor_products = FactorProduct::where('factor_id',$factor->id);
+        $factor_products = FactorProduct::where('factor_id', $factor->id);
 
         return view('dashboard.factors.print_factor', [
             'factor' => $factor,
@@ -195,5 +222,57 @@ class FactorController extends Controller
             'total_products_weight' => $factor_products->sum(DB::raw('weight')),
         ]);
 
+    }
+
+    public function sendFactorSMS($phone, $name, $date, $price, $number)
+    {
+
+        $url = "https://api.sms.ir/v1/send/verify";
+
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_POST, true);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+        $headers = array(
+            "Accept: application/json",
+            "Content-Type: application/json",
+            "X-API-KEY: XMNvSzRUrAvmLPR4Kxi4CY8KirC6TCIJ9dZhhMY9EUCCcoDJyWeOQ7lXxvVS2v3J",
+        );
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+
+        $data = '
+        {
+            "mobile": "' . $phone . '",
+            "templateId": 795597,
+            "parameters": [
+              {
+                "name": "NAME",
+                "value": "' . $name . '"
+              },
+                     {
+                "name": "NUMBER",
+                "value": "' . $number . '"
+              },
+                     {
+                "name": "DATE",
+                "value": "' . $date . '"
+              },
+                     {
+                "name": "PRICE",
+                "value": "' . number_format($price) . '"
+              },
+                     {
+                "name": "LINK",
+                "value": "' . asset('factor/print/'.$number) . '"
+              }
+            ]
+        }';
+
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+        $resp = curl_exec($curl);
+        curl_close($curl);
+
+        return $resp;
     }
 }

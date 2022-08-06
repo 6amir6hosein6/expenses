@@ -12,6 +12,6 @@ class Safi extends Model
     protected $table = "safis";
 
     protected $fillable = [
-        'load_id', 'load_owner_name', 'load_driver', 'date', 'do_price', 'hire', 'discharge', 'weighbridge', 'handy'
+        'load_id', 'load_owner_name', 'load_driver', 'date', 'do_price', 'hire', 'discharge', 'weighbridge', 'handy' , 'is_saved'
     ];
 }

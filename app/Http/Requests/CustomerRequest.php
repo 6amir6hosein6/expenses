@@ -25,7 +25,7 @@ class CustomerRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'photo' => 'max:150|mimes:jpeg,jpg,png',
+            'photo' => 'max:4096|mimes:jpeg,jpg,png',
             'debt' => 'min:0'
         ];
     }

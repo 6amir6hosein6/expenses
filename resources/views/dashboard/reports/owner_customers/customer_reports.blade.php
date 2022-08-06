@@ -38,7 +38,7 @@
 
                     <div class="col-sm-1">
                         @if($customer_image)
-                            <img src="data:image/png;base64, {{$customer_image}}"
+                            <img src="{{$customer_image}}"
                                  style="max-width:100px;max-height: 150px">
                         @else
                             <img src="{{asset('img/no_person.png')}}" style="width: 100px;position: absolute">

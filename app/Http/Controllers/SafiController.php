@@ -18,7 +18,7 @@ class SafiController extends Controller
 {
     public function index()
     {
-        $safis = Safi::orderBy('id', 'DESC')->get();
+        $safis = Safi::orderBy('id', 'DESC')->where('is_saved',1)->get();
         foreach ($safis as $safi) {
             $safi_products_total = FactorProduct::where('safi_id', $safi->id)
                 ->sum(DB::raw('weight * count * fee'));
@@ -127,10 +127,15 @@ class SafiController extends Controller
 
     public function search(Request $request)
     {
-        $safis = Factor::where('load_owner_name', 'like', '%' . $request->keyword . '%')
-            ->orWhere('id', $request->keyword)
-            ->orderBy('id', 'DESC')
+        $safis = Factor::orderBy('id', 'DESC')
+            ->where('is_saved',1)
             ->get();
+
+        $safis->where(function ($query) use ($request) {
+            $query->where('load_owner_name', 'like', '%' . $request->keyword . '%')
+                ->orWhere('id', $request->keyword);
+        });
+
         return view('dashboard.safis.safis')->with(['safis' => $safis, 'keyword' => $request->keyword]);
 
     }

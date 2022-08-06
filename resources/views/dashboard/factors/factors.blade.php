@@ -54,6 +54,20 @@
                     </center>
                 </div>
             @endif
+            @if (session('sms_success'))
+                <div class="alert alert-success">
+                    <center>
+                        <li class="breadcrumb-item">{{ session('sms_success') }}</li>
+                    </center>
+                </div>
+            @endif
+            @if (session('sms_failed'))
+                <div class="alert alert-danger">
+                    <center>
+                        <li class="breadcrumb-item">{{ session('sms_failed') }}</li>
+                    </center>
+                </div>
+            @endif
             @if (session('error'))
                 <div class="alert alert-error">
                     <center>
@@ -93,7 +107,7 @@
                             <th scope="col">{{$factor->total}}</th>
 
                             @if($factor->last_debt < 0)
-                                <th scope="col">{{abs($factor->last_debt)}} (طلبکار) </th>
+                                <th scope="col">{{abs($factor->last_debt)}} (طلبکار)</th>
                             @else
                                 <th scope="col">{{$factor->last_debt}}</th>
                             @endif
@@ -101,7 +115,8 @@
                             <th scope="col">{{$factor->paid}}</th>
 
                             @if($factor->last_debt + $factor->total - $factor->paid < 0)
-                                <th scope="col">{{abs($factor->last_debt + $factor->total - $factor->paid)}} (طلبکار) </th>
+                                <th scope="col">{{abs($factor->last_debt + $factor->total - $factor->paid)}}(طلبکار)
+                                </th>
                             @else
                                 <th scope="col">{{$factor->last_debt + $factor->total - $factor->paid}}</th>
                             @endif

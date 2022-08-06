@@ -28,6 +28,8 @@ class CreateSafisTable extends Migration
 
             $table->string('date');
 
+            $table->boolean('is_saved')->default(0);
+
             $table->timestamps();
         });
     }

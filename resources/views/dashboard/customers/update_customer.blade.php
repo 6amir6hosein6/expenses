@@ -46,7 +46,7 @@
             <div class="grid-item item1">
                 <center>
                     @if($customer->photo)
-                        <img id="preview" src="data:image/png;base64, {{$customer->photo}}" style="width: 50%;margin-top: 10%;max-width: 300px;max-height: 400px"/>
+                        <img id="preview" src="{{$customer->photo}}" style="width: 50%;margin-top: 10%;max-width: 300px;max-height: 400px"/>
                     @else
                         <img id="preview" src="{{asset('img/no_person.png')}}" style="width: 50%;margin-top: 10%;max-width: 300px;max-height: 400px"/>
                     @endif

@@ -43,7 +43,7 @@
                             <div class="col-sm-6" style="text-align: center;font-size: 13px">
                                 <center>
                                     <span style="padding-bottom: 0">
-                                        تلفن حجره : 2232129 - 0423
+                                        تلفن حجره : 52232129 - 041
                                     </span>
                                     <br>
                                     <span>
@@ -59,7 +59,7 @@
                                     </span>
                                     <br>
                                     <span>
-                                        فرزین سیرانی : 09148290018
+                                        فرزین سیرانی : 09145020488
                                     </span>
                                 </center>
 

@@ -6,6 +6,7 @@ use App\Http\Requests\LoadRequest;
 use App\Http\Requests\LoginRequest;
 use App\Models\Customer;
 use App\Models\Load;
+use App\Models\Safi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -65,9 +66,11 @@ class LoadController extends Controller
     {
         if ($load_id){
             Load::find($load_id)->update(['is_new'=>0]);
+            Safi::where('load_id',$load_id)->update(['is_saved'=>1]);
             $message = "بار با موفقیت تایید شد";
         }else{
             Load::where('is_new',1)->update(['is_new'=>0]);
+            Safi::where('is_saved',0)->update(['is_saved'=>1]);
             $message = "بار ها با موفقیت تایید شدند";
         }
         return Redirect::route('loads.new-loads')->with('status', $message);

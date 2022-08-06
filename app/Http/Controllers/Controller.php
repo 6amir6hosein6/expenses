@@ -12,11 +12,12 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    public function getToday(){
+    public function getToday()
+    {
 
         $date = Jalalian::now();
-        $month = ($date->getMonth()<10)? 0 . $date->getMonth() : $date->getMonth();
-        $day = ($date->getDay()<10)? 0 . $date->getDay() : $date->getDay();
+        $month = ($date->getMonth() < 10) ? 0 . $date->getMonth() : $date->getMonth();
+        $day = ($date->getDay() < 10) ? 0 . $date->getDay() : $date->getDay();
         $date = $date->getYear() . '/' . $month . '/' . $day;
 
         return $date;
@@ -25,8 +26,8 @@ class Controller extends BaseController
     public function subToday(int $days)
     {
         $date = Jalalian::now()->subDays($days);
-        $month = ($date->getMonth()<10)? 0 . $date->getMonth() : $date->getMonth();
-        $day = ($date->getDay()<10)? 0 . $date->getDay() : $date->getDay();
+        $month = ($date->getMonth() < 10) ? 0 . $date->getMonth() : $date->getMonth();
+        $day = ($date->getDay() < 10) ? 0 . $date->getDay() : $date->getDay();
         $date = $date->getYear() . '/' . $month . '/' . $day;
         return $date;
     }

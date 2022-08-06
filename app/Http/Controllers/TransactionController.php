@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\TransactionRequest;
 use App\Models\Customer;
+use App\Models\Factor;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -66,6 +67,12 @@ class TransactionController extends Controller
 
         $customer = Customer::find($transaction->customer_id);
         $customer->update(['debt'=>$customer->debt + $price]);
+
+        DB::table('factors')
+            ->where('created_at','>',$transaction->created_at)
+            ->update(array(
+                'last_debt' => DB::raw('last_debt +' . $price),
+            ));
 
         $transaction->delete();
 

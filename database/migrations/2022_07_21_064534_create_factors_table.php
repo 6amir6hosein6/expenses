@@ -28,6 +28,8 @@ class CreateFactorsTable extends Migration
             $table->integer('last_debt');
             $table->integer('paid');
 
+            $table->boolean('is_saved')->default(0);
+
 
             $table->timestamps();
         });
