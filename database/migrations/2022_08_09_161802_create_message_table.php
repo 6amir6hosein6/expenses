@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTransactionsTable extends Migration
+class CreateMessageTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,27 +13,20 @@ class CreateTransactionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('transactions', function (Blueprint $table) {
+        Schema::create('messages', function (Blueprint $table) {
             $table->id();
+            $table->string('date');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('family_id');
-            $table->unsignedBigInteger('price');
-            $table->string('date');
-            $table->text('description')->nullable();
-            $table->string('for_what')->default('متفرقه');
-            $table->string('title');
-
-            $table->integer('importance');
+            $table->string('user_name');
+            $table->text('message');
             $table->timestamps();
 
             $table->foreign('user_id')->on('users')->references('id')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
+                ->onDelete('cascade');
 
             $table->foreign('family_id')->on('families')->references('id')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
-
+                ->onDelete('cascade');
         });
     }
 
@@ -44,6 +37,6 @@ class CreateTransactionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('transactions');
+        Schema::dropIfExists('message');
     }
 }

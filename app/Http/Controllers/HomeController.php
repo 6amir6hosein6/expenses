@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Customer;
+use App\Models\Family;
 use App\Models\Factor;
 use App\Models\FactorProduct;
 use App\Models\Load;
+use App\Models\Transaction;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -15,51 +17,73 @@ class HomeController extends Controller
 {
     public function home()
     {
-        $customer_count = Customer::count();
-        $factor_count = Factor::count();
-        $total_debt_price = Customer::where('debt', '>', 0)->sum('debt');
-        $debtor_count = Customer::where('debt', '<', 0)->count();
-        $not_ended_loads = Load::where('is_new', 1)->count();
+        $family_member_count = User::where('family_id', auth()->user()->family_id)->count();
 
-        $factor_count_day_based = [];
-
-        $last_7_days_products = Factor::orderBy('date', 'DESC')
+        $total_last_week_transaction = Transaction::where('family_id', auth()->user()->family_id)
             ->whereDate('created_at', '>', Carbon::today()->subDays(8))
+            ->sum('price');
+
+        $each_family_user_spend_in_week = Transaction::select([DB::raw("SUM(price) as each_person_total_price"), 'user_id', 'name'])
+            ->join('users', 'users.id', '=', 'transactions.user_id')
+            ->where('transactions.family_id', auth()->user()->family_id)
+            ->whereDate('transactions.created_at', '>', Carbon::today()->subDays(8))
+            ->groupBy('user_id');
+
+        $most_spender_among_users_in_week = $each_family_user_spend_in_week->orderBy('each_person_total_price', 'DESC')
+            ->limit(1)
+            ->first();
+
+        $most_expensive_expense = Transaction::where('transactions.family_id', auth()->user()->family_id)
+            ->whereDate('transactions.created_at', '>', Carbon::today()->subDays(8))
+            ->orderBy('price', 'DESC')
+            ->limit(1)
+            ->first();
+
+
+        $transactions_sum_price_day_based = [];
+
+        $last_7_days_transaction = Transaction::orderBy('date', 'DESC')
+            ->whereDate('created_at', '>', Carbon::today()->subDays(8))
+            ->where('transactions.family_id', auth()->user()->family_id)
             ->get();
 
         for ($i = 0; $i < 7; $i++) {
             $date = $this->subToday($i);
-            $factor_count_day_based[$date] = 0;
-            foreach ($last_7_days_products as $factor) {
-                if ($factor->date == $date) {
-                    $factor_count_day_based[$date] += 1;
+            $transactions_sum_price_day_based[$date] = 0;
+            foreach ($last_7_days_transaction as $transaction) {
+                if ($transaction->date == $date) {
+                    $transactions_sum_price_day_based[$date] += $transaction->price;
                 }
             }
         }
 
-        $customer_count_kind_based =
+        $transaction_importance_count =
             [
-                ['count' => 0, 'kind' => 'بدهکار'],
-                ['count' => 0, 'kind' => 'طلبکار'],
-                ['count' => 0, 'kind' => 'بی حساب'],
+                ['count' => 0, 'kind' => 'خیلی کم'],
+                ['count' => 0, 'kind' => 'کم'],
+                ['count' => 0, 'kind' => 'متسط'],
+                ['count' => 0, 'kind' => 'زیاد'],
+                ['count' => 0, 'kind' => 'خیلی زیاد'],
             ];
-
-        foreach (Customer::all() as $customer){
-            if ($customer->debt < 0) $customer_count_kind_based[1]['count'] += 1;
-            elseif ($customer->debt > 0) $customer_count_kind_based[0]['count'] += 1;
-            else $customer_count_kind_based[2]['count'] += 1;
+        $this_week_Transactions = Transaction::where('family_id',auth()->user()->family_id)
+            ->whereDate('transactions.created_at', '>', Carbon::today()->subDays(8))->get();
+        foreach ($this_week_Transactions as $transaction){
+            if ($transaction->importance == 1) $transaction_importance_count[0]['count'] += 1;
+            elseif ($transaction->importance == 2) $transaction_importance_count[1]['count'] += 1;
+            elseif ($transaction->importance == 3) $transaction_importance_count[2]['count'] += 1;
+            elseif ($transaction->importance == 4) $transaction_importance_count[3]['count'] += 1;
+            elseif ($transaction->importance == 5) $transaction_importance_count[4]['count'] += 1;
         }
-
-        return view('dashboard.index')->with(
-            [
-                'customer_count' => $customer_count,
-                'factor_count' => $factor_count,
-                'total_debt_price' => $total_debt_price,
-                'debtor_count' => $debtor_count,
-                'not_ended_loads' => $not_ended_loads,
-                'factor_count_day_based' => json_encode(array_reverse($factor_count_day_based)),
-                'customer_count_kind_based' => json_encode($customer_count_kind_based)
-            ]
-        );
+        return view('dashboard.index')
+            ->with(
+                [
+                    'most_expensive_expense' => $most_expensive_expense,
+                    'most_spender_among_users_in_week' => $most_spender_among_users_in_week,
+                    'total_last_week_transaction' => $total_last_week_transaction,
+                    'family_member_count' => $family_member_count,
+                    'transaction_importance_count' => json_encode($transaction_importance_count),
+                    'transactions_sum_price_day_based' => json_encode(array_reverse($transactions_sum_price_day_based)),
+                ]
+            );
     }
 }

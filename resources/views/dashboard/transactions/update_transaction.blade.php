@@ -3,7 +3,7 @@
 <head>
     @include('dashboard.header')
 
-    <title>ثبت تراکنش جدید</title>
+    <title>ویرایش تراکنش</title>
 
     <link href="{{asset('js/bootstrap-select.min.css')}}" rel="stylesheet"/>
     <script src="{{asset('js/bootstrap-select.min.js')}}" defer></script>
@@ -23,7 +23,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-9">
-                        <h1 class="m-0 text-dark">ثبت تراکنش جدید</h1>
+                        <h1 class="m-0 text-dark">ویرایش تراکنش</h1>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
 
@@ -41,9 +41,10 @@
             @endif
             <div class="container-fluid">
                 <div class="row">
-                    <form method="post" action="{{route('transactions.store')}}" enctype="multipart/form-data"
+                    <form method="post" action="{{route('transactions.update',[$transaction->id])}}" enctype="multipart/form-data"
                           style="width: 100%">
                         @csrf
+                        @method('PUT')
                         <div class="card-body">
 
 
@@ -52,7 +53,7 @@
                                     <div class="form-group">
                                         <label for="title">عنوان پرداخت</label>
                                         <input type="text" name="title" class="form-control"
-                                               id="title" placeholder="مثال : ۳ عدد نان"  required>
+                                               id="title" value="{{$transaction->title}}" placeholder="مثال : ۳ عدد نان"  required>
                                     </div>
                                 </div>
 
@@ -60,7 +61,7 @@
                                     <div class="form-group">
                                         <label for="date">تاریخ پرداخت</label>
                                         <input type="text" name="date" class="form-control"
-                                               id="date" value="{{$date}}" required>
+                                               id="date"  value="{{$transaction->date}}" required>
                                     </div>
                                 </div>
 
@@ -68,7 +69,7 @@
                                     <div class="form-group">
                                         <label for="importance">درجه اهمیت (۱ تا ۵)</label>
                                         <input type="number" max="5" min="1" name="importance" class="form-control"
-                                               id="importance" value="1" required>
+                                               id="importance"  value="{{$transaction->importance}}" required>
                                     </div>
                                 </div>
 
@@ -81,7 +82,7 @@
                                     <div class="form-group">
                                         <label for="price">مبلغ(تومان)</label>
                                         <input type="number" class="form-control"
-                                               id="price" name="price" placeholder="مثال : 200000" value="0" required>
+                                               id="price" name="price"  placeholder="مثال : 200000" value="{{$transaction->price}}" required>
                                     </div>
                                 </div>
 
@@ -104,7 +105,7 @@
                                     <div class="form-group">
                                         <label for="description">توضیحات</label>
                                         <input type="text" class="form-control"
-                                               id="description" name="description">
+                                               id="description" value="{{$transaction->description}}" name="description">
                                     </div>
                                 </div>
                             </div>

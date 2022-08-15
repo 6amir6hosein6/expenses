@@ -3,26 +3,6 @@
 <script src="{{asset("js/jquery-ui.min.js")}}"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>
-    $.ajax({
-        headers: {
-            'X-API-KEY':'XMNvSzRUrAvmLPR4Kxi4CY8KirC6TCIJ9dZhhMY9EUCCcoDJyWeOQ7lXxvVS2v3J',
-            'ACCEPT':'application/json'
-        },
-        type: 'GET',
-        url: 'https://api.sms.ir/v1/credit',
-        dataType: "json",
-        crossDomain: true,
-        success: function( response ) {
-            document.getElementById('SMSPriceExist').innerHTML = "اعتبار پنل پیامک : " + (response['data']) + "  پیامک";
-            if(response['data'] < 20){
-                document.getElementById('SMSPriceExist').style = "color:red";
-            }
-
-        }
-
-    });
-</script>
-<script>
     $.widget.bridge('uibutton', $.ui.button)
 </script>
 <!-- Bootstrap 4 -->

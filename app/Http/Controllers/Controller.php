@@ -23,6 +23,15 @@ class Controller extends BaseController
         return $date;
     }
 
+    public function getNow(): string
+    {
+        $date = Jalalian::now();
+        $hour = $date->getHour();
+        $minute = $date->getMinute();
+
+        return $hour . ':' . $minute;
+    }
+
     public function subToday(int $days)
     {
         $date = Jalalian::now()->subDays($days);
