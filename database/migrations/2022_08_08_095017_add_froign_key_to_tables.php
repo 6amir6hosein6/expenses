@@ -22,7 +22,7 @@ class AddFroignKeyToTables extends Migration
         $family = \App\Models\Family::create();
 
         \App\Models\User::create([
-            'name' => 'علیرضا جعفری',
+            'name' => 'نعمت فرخاری',
             'phone' => '09125193247',
             'password' => \Illuminate\Support\Facades\Hash::make('123456'),
             'national_id' => '0021458744',
@@ -34,11 +34,11 @@ class AddFroignKeyToTables extends Migration
         $family->update(['owner_id'=>1]);
 
         \App\Models\User::create([
-            'name' => 'امیرحسین نجفی',
+            'name' => 'مهسا فرخاری',
             'phone' => '09125952248',
             'password' => \Illuminate\Support\Facades\Hash::make('123456'),
             'national_id' => '0021458744',
-            'title' => 'پسر',
+            'title' => 'دخترم',
             'family_id' => 1,
         ]);
 
