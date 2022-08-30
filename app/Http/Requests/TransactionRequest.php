@@ -29,7 +29,7 @@ class TransactionRequest extends FormRequest
             'price' => 'required|integer|min:1',
             'title' => 'required',
             'importance' => 'required|min:1|max:5|integer',
-            'fee' => 'min:1|integer',
+            'fee' => '',
             'fee_name' => '',
 
         ];

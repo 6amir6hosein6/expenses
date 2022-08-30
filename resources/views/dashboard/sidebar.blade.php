@@ -233,7 +233,7 @@
                                     <input type="hidden" name="for_what_sub" value="همه">
                                     <button type="submit" class="btn nav-link" style="background-color: inherit;border: none;height: inherit">
                                         <i class="fa fa-font   nav-icon"></i>
-                                        <p>گزارشات خرید هفتگی</p>
+                                        <p>گزارشات خرید ماهانه</p>
                                     </button>
                                 </form>
                             </li>

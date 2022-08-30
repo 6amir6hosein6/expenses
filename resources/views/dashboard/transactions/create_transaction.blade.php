@@ -60,7 +60,7 @@
                                     <div class="form-group">
                                         <label for="fee">فی</label>
                                         <input type="number" name="fee" class="form-control"
-                                               id="fee" placeholder="مثال : ۳ "  required>
+                                               id="fee" placeholder="مثال : ۳ ">
                                     </div>
                                 </div>
 
@@ -68,7 +68,7 @@
                                     <div class="form-group">
                                         <label for="fee_name">نام واحد</label>
                                         <input type="text" name="fee_name" class="form-control"
-                                               id="fee_name" placeholder="مثال : عدد"  required>
+                                               id="fee_name" placeholder="مثال : عدد">
                                     </div>
                                 </div>
 
@@ -190,7 +190,7 @@
         }else if(value === "قبوض"){
             ["آب","برق","گاز","تلفن","موبایل","اینترنت"].forEach(addOption);
         }else if(value === "خوراک"){
-            ["پروتئین","میوه","سبزیجات","خاروبار","خشکبار","رستوران و فست فود","کافی شاپ"].forEach(addOption);
+            ["پروتئین","میوه","سبزیجات","خواروبار","خشکبار","رستوران و فست فود","کافی شاپ"].forEach(addOption);
         }else if(value === "ماشین"){
             ["بنزین","سرویس","کارواش","لوازم","تعمیرات","بیمه","عوارض" , "سایر"].forEach(addOption);
         }else if(value === "حمل و نقل"){
