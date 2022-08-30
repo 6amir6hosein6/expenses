@@ -82,7 +82,10 @@
                             <div class="inner">
                                 @if(!is_null($most_expensive_expense))
                                     <h5>{{number_format($most_expensive_expense->price)}}<small>
-                                            ({{$most_expensive_expense->title}})</small></h5>
+                                            ({{$most_expensive_expense->title}}
+                                            {{$most_expensive_expense->fee}}
+                                            {{$most_expensive_expense->fee_name}})
+                                        </small></h5>
 
                                 @else
                                     <h5>خریدی ثبت نشده است</h5>
@@ -125,8 +128,8 @@
                                 </h3>
                             </div><!-- /.card-header -->
                             <div class="card-body" style="padding: 0">
-                                <canvas height="250px" id="myChart2"
-                                        style="width:100%;max-width:600px;max-height: 400px"></canvas>
+                                <canvas height="250px" width="250px" id="myChart2"
+                                        style="width:250px;height:250px;max-width:400px;max-height: 400px"></canvas>
                             </div>
                         </div>
                         <!-- /.card -->

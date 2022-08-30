@@ -51,10 +51,13 @@
                     <tr>
                         <th scope="col">کد</th>
                         <th scope="col">عنوان</th>
+                        <th scope="col">فی</th>
+                        <th scope="col">واحد</th>
                         <th scope="col">تاریخ</th>
                         <th scope="col">مبلغ تراکنش</th>
                         <th scope="col">درجه اهمیت</th>
                         <th scope="col">دسته بندی</th>
+                        <th scope="col">زیر دسته بندی</th>
                         <th scope="col">توضیحات</th>
                         <th scope="col">ویرایش</th>
                         <th scope="col">حذف</th>
@@ -65,10 +68,13 @@
                         <tr>
                             <th scope="col">{{$transaction->id}}</th>
                             <th scope="col">{{$transaction->title}}</th>
+                            <th scope="col">{{$transaction->fee}}</th>
+                            <th scope="col">{{$transaction->fee_name}}</th>
                             <th scope="col">{{$transaction->date}}</th>
                             <th scope="col">{{$transaction->price}}</th>
                             <th scope="col">{{$transaction->importance}}</th>
                             <th scope="col">{{$transaction->for_what}}</th>
+                            <th scope="col">{{$transaction->for_what_sub}}</th>
                             <th scope="col">{{$transaction->description}}</th>
                             <th scope="col">
                                 <a style="font-size: 30px;"

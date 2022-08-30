@@ -203,6 +203,44 @@
                         </ul>
                     </li>
 
+                    <li class="nav-item has-treeview">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fa fa-reply "></i>
+                            <p>
+                                گزارشات
+                                <i class="right fa fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview" style="">
+                            <li class="nav-item"
+                                style="border: 1px solid lightgray;border-radius: 10px;margin-top: 5px;height: 40px">
+                                <form  action="{{route('reports.transaction_reports_weekly')}}" method="post">
+                                    @csrf
+                                    <input type="hidden" name="for_what" value="همه">
+                                    <input type="hidden" name="for_what_sub" value="همه">
+                                    <button type="submit" class="btn nav-link" style="background-color: inherit;border: none;height: inherit">
+                                        <i class="fa fa-font   nav-icon"></i>
+                                        <p>گزارشات خرید هفتگی</p>
+                                    </button>
+                                </form>
+                            </li>
+
+                            <li class="nav-item"
+                                style="border: 1px solid lightgray;border-radius: 10px;margin-top: 5px;height: 40px">
+                                <form  action="{{route('reports.transaction_reports_monthly')}}" method="post">
+                                    @csrf
+                                    <input type="hidden" name="for_what" value="همه">
+                                    <input type="hidden" name="for_what_sub" value="همه">
+                                    <button type="submit" class="btn nav-link" style="background-color: inherit;border: none;height: inherit">
+                                        <i class="fa fa-font   nav-icon"></i>
+                                        <p>گزارشات خرید هفتگی</p>
+                                    </button>
+                                </form>
+                            </li>
+                            <hr style="border-top: 1px solid lightgray">
+                        </ul>
+                    </li>
+
                 </ul>
             </nav>
             <!-- /.sidebar-menu -->

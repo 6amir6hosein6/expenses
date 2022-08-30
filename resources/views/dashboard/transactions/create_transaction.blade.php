@@ -48,11 +48,27 @@
 
 
                             <div class="row">
-                                <div class="col-sm-6">
+                                <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="title">عنوان پرداخت</label>
                                         <input type="text" name="title" class="form-control"
-                                               id="title" placeholder="مثال : ۳ عدد نان"  required>
+                                               id="title" placeholder="مثال : نان"  required>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        <label for="fee">فی</label>
+                                        <input type="number" name="fee" class="form-control"
+                                               id="fee" placeholder="مثال : ۳ "  required>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        <label for="fee_name">نام واحد</label>
+                                        <input type="text" name="fee_name" class="form-control"
+                                               id="fee_name" placeholder="مثال : عدد"  required>
                                     </div>
                                 </div>
 
@@ -64,7 +80,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-sm-3">
+                                <div class="col-sm-2">
                                     <div class="form-group">
                                         <label for="importance">درجه اهمیت (۱ تا ۵)</label>
                                         <input type="number" max="5" min="1" name="importance" class="form-control"
@@ -77,7 +93,7 @@
                             <hr style="opacity: 70%">
 
                             <div class="row">
-                                <div class="col-sm-3">
+                                <div class="col-sm-2">
                                     <div class="form-group">
                                         <label for="price">مبلغ(تومان)</label>
                                         <input type="number" class="form-control"
@@ -89,18 +105,35 @@
                                     <div class="form-group">
                                         <label for="for_what">دسته بندی</label>
                                         <select name="for_what" class="form-control"
-                                                id="for_what">
-                                            <option value="خوراک">خوراک</option>
-                                            <option value="پوشاک">پوشاک</option>
-                                            <option value="حمل و نقل">حمل و نقل</option>
+                                                id="for_what" onchange="change_sub_cat()">
+                                            <option selected disabled hidden>انتخاب کنید</option>
                                             <option value="خانه">خانه</option>
                                             <option value="قبوض">قبوض</option>
+                                            <option value="خوراک">خوراک</option>
+                                            <option value="ماشین">ماشین</option>
+                                            <option value="حمل و نقل">حمل و نقل</option>
+                                            <option value="مصرفی">مصرفی</option>
+                                            <option value="شخصی">شخصی</option>
+                                            <option value="تفریح و ورزش">تفریح و ورزش</option>
+                                            <option value="مسافرت">مسافرت</option>
+                                            <option value="مالی">مالی</option>
                                             <option value="متفرقه">متفرقه</option>
                                         </select>
                                     </div>
                                 </div>
 
-                                <div class="col-sm-6">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="for_what_sub">زیر دسته بندی</label>
+                                        <select name="for_what_sub" class="form-control sub-cat-select"
+                                                id="for_what_sub">
+                                            <option selected disabled hidden>انتخاب کنید</option>
+                                            <option disabled is="select-sub-first">زیر دسته بندی انتخاب کنید</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4">
                                     <div class="form-group">
                                         <label for="description">توضیحات</label>
                                         <input type="text" class="form-control"
@@ -144,6 +177,52 @@
 
 <!-- jQuery -->
 @include('dashboard.footer')
+<script>
+    function change_sub_cat(){
+        let select = document.getElementById('for_what');
+        let value = select.options[select.selectedIndex].value;
 
+        let sub_select = document.getElementById('for_what_sub');
+        removeAllChild(sub_select);
+
+        if(value === "خانه"){
+            ["اجاره","شارژ ساختمان","وسایل منزل"].forEach(addOption);
+        }else if(value === "قبوض"){
+            ["آب","برق","گاز","تلفن","موبایل","اینترنت"].forEach(addOption);
+        }else if(value === "خوراک"){
+            ["پروتئین","میوه","سبزیجات","خاروبار","خشکبار","رستوران و فست فود","کافی شاپ"].forEach(addOption);
+        }else if(value === "ماشین"){
+            ["بنزین","سرویس","کارواش","لوازم","تعمیرات","بیمه","عوارض" , "سایر"].forEach(addOption);
+        }else if(value === "حمل و نقل"){
+            ["تاکسی","هواپیما","قطار","اتوبوس","BRT"].forEach(addOption);
+        }else if(value === "مصرفی"){
+            ["دارو","لوازم آرایشی","لباس و کفش","لوازم برقی","ابزار و ‌وسیله"].forEach(addOption);
+        }else if(value === "شخصی"){
+            ["آرایشگاه","خشکشویی","کلاس آموزشی","پزشکی","هدیه","کمک به خیریه","پس انداز"].forEach(addOption);
+        }else if(value === "تفریح و ورزش"){
+            ["سینما","تئاتر","ورزش","تفریح","غیره"].forEach(addOption);
+        }else if(value === "مسافرت"){
+            ["اقامت و هتل","پاسپورت و ویزا","خوراک","تفریحات سفر"].forEach(addOption);
+        }else if(value === "مالی"){
+            ["اقساط","بدهی"].forEach(addOption);
+        }else{
+            ["متفرقه"].forEach(addOption);
+        }
+
+    }
+    function addOption(item, index){
+        let sub_select = document.getElementById('for_what_sub');
+        let opt = document.createElement('option');
+        opt.value = item;
+        opt.innerHTML = item;
+        sub_select.appendChild(opt);
+    }
+
+    function removeAllChild(selectBox){
+        while (selectBox.options.length > 0) {
+            selectBox.remove(0);
+        }
+    }
+</script>
 </body>
 </html>

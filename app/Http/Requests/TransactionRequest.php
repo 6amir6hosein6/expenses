@@ -28,8 +28,10 @@ class TransactionRequest extends FormRequest
             'date' => ['required', 'regex:/(13[0-9][0-9]|14[0-9][0-9])\/(0[1-9]|1[0-2])\/(0[1-9]|1[0-9]|2[0-9]|3[0-1])$/'],
             'price' => 'required|integer|min:1',
             'title' => 'required',
-            'description' => 'required',
             'importance' => 'required|min:1|max:5|integer',
+            'fee' => 'required|min:1|integer',
+            'fee_name' => 'required',
+
         ];
     }
 
@@ -44,11 +46,18 @@ class TransactionRequest extends FormRequest
             'price.min' => 'مقدار مبلغ پرداختی نمی تواند صفر یا منفی باشد',
 
             'title.required' => 'لطفا عنوان را وارد کنید',
-            'description.required' => 'لطفا توضیحات را وارد کنید',
             'importance.required' => 'لطفا درجه اهمیت را وارد کنید',
             'importance.min' => 'درجه اهمیت باید بین اعداد ۱ تا ۵ باشد',
             'importance.max' => 'درجه اهمیت باید بین اعداد ۱ تا ۵ باشد',
             'importance.integer' => ' درجه اهمیت باید عدد باشد',
+
+            'fee.required' => 'لطفا فی را وارد کنید',
+            'fee.min' => 'فی کمتر از ۱ نمیتواند باشد',
+            'fee.integer' => 'فی باید عدد باشد',
+
+            'fee_name.required' => 'لطفا واحد را وارد کنید',
+
+
 
         ];
     }

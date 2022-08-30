@@ -21,7 +21,10 @@ class CreateTransactionsTable extends Migration
             $table->string('date');
             $table->text('description')->nullable();
             $table->string('for_what')->default('متفرقه');
+            $table->string('for_what_sub')->default('متفرقه');
             $table->string('title');
+            $table->integer('fee');
+            $table->string('fee_name');
 
             $table->integer('importance');
             $table->timestamps();

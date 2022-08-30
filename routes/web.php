@@ -35,5 +35,8 @@ Route::group(['middleware' => ['web','auth']], function () {
     Route::resource('transactions',TransactionController::class);
     Route::get('my-transactions',[TransactionController::class,'myTransactions'])->name('my-transactions');
 
+    Route::post('transaction-reports-weekly',[ReportController::class,'transactionReportsWeekly'])->name('reports.transaction_reports_weekly');
+    Route::post('transaction-reports-monthly',[ReportController::class,'transactionReportsMonthly'])->name('reports.transaction_reports_monthly');
+
     Route::resource('messages',MessageController::class);
 });
