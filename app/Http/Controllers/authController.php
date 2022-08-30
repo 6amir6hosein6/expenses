@@ -23,9 +23,19 @@ class authController extends Controller
     public function ownerSignin(LoginRequest $request) {
         $phone = $request->phone;
         $password = $request->password;
+        $type = $request->type;
 
         if (Auth::attempt(['phone' => $phone, 'password' => $password])) {
-            return redirect()->route('home');
+            if ($type=="owner" && auth()->user()->family_owner){
+                return redirect()->route('home');
+            }elseif ($type=="notowner" && is_null(auth()->user()->family_owner)){
+                return redirect()->route('home');
+            }else{
+                Auth::logout();
+                return Redirect::back()->withErrors([
+                    'wrong_inf' => 'فرم اشتباه انتخاب شده است'
+                ]);
+            }
         }
         return Redirect::back()->withErrors([
             'wrong_inf' => 'اطلاعات وارد شده صحیح نمی باشد'

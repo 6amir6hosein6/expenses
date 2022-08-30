@@ -177,6 +177,8 @@
                         <label for="exampleInputPassword1">شماره تلفن سرپرست خانواده</label>
                         <input type="text" name="phone" class="form-control" id="exampleInputPassword1"
                                placeholder="مثال : ۰۹۱۲۵۸۵۲۲۳۷">
+
+
                     </div>
                 </div>
                 <div class="col-sm-4"></div>
@@ -198,6 +200,7 @@
                 <div class="col-sm-12">
                     <div class="form-group">
                         <center>
+                            <input type="hidden" value="owner" name="type">
                             <button type="submit" class="btn btn-primary">ورود سرپرست خانواده</button>
                         </center>
                     </div>
@@ -243,6 +246,7 @@
                 <div class="col-sm-12">
                     <div class="form-group">
                         <center>
+                            <input type="hidden" value="notowner" name="type">
                             <button type="submit" class="btn btn-primary">ورود عضو خانواده</button>
                         </center>
                     </div>
