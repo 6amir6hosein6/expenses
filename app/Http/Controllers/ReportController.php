@@ -11,7 +11,7 @@ class ReportController extends Controller
     public function transactionReportsWeekly(Request $request)
     {
         $transactions = Transaction::orderBy('date', 'DESC')
-            ->whereDate('transactions.created_at', '>', Carbon::today()->subDays(8))
+            ->whereDate('date', '>', $this->subToday(7))
             ->where('transactions.family_id', auth()->user()->family_id);
 
 
@@ -37,7 +37,7 @@ class ReportController extends Controller
     public function transactionReportsMonthly(Request $request)
     {
         $transactions = Transaction::orderBy('date', 'DESC')
-            ->whereDate('transactions.created_at', '>', Carbon::today()->subMonth(1))
+            ->whereDate('date', '>', $this->subToday(30))
             ->where('transactions.family_id', auth()->user()->family_id);
 
 

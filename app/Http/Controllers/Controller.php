@@ -32,6 +32,7 @@ class Controller extends BaseController
         return $hour . ':' . $minute;
     }
 
+
     public function subToday(int $days)
     {
         $date = Jalalian::now()->subDays($days);
